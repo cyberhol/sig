@@ -1,7 +1,7 @@
 name: Sign with Sigstore
 on: [push]
 permissions:
-  contents: write 
+  contents: write
   id-token: write
 jobs:
   sign:
@@ -13,14 +13,14 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: 1
         run: |
-          cosign sign-blob --yes --output-signature sihol.ps1.sig sihol.ps1
+          cosign sign-blob --yes --output-certificate cert.pem --output-signature sihol.ps1.sig sihol.ps1
       - name: Verify signature
         run: |
-          cosign verify-blob --signature sihol.ps1.sig sihol.ps1
-      - name: Commit signature  
+          cosign verify-blob --certificate cert.pem --signature sihol.ps1.sig sihol.ps1
+      - name: Commit signature and certificate
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
-          git add sihol.ps1.sig
-          git commit -m "Add signature for sihol.ps1" || exit 0
+          git add sihol.ps1.sig cert.pem
+          git commit -m "Add signature and certificate for sihol.ps1" || exit 0
           git push
