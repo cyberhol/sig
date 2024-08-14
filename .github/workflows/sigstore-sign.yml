@@ -15,8 +15,10 @@ jobs:
         run: |
           cosign sign-blob --yes --output-certificate cert.pem --output-signature sihol.ps1.sig sihol.ps1
       - name: Verify signature
+        env:
+          COSIGN_EXPERIMENTAL: 1
         run: |
-          cosign verify-blob --certificate cert.pem --signature sihol.ps1.sig sihol.ps1
+          cosign verify-blob --certificate cert.pem --signature sihol.ps1.sig --certificate-identity "https://github.com/cyberhol/sig/.github/workflows/sigstore-sign.yml@refs/heads/main" --certificate-oidc-issuer "https://token.actions.githubusercontent.com" sihol.ps1
       - name: Commit signature and certificate
         run: |
           git config --global user.name 'GitHub Action'
