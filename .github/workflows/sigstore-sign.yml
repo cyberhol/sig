@@ -13,7 +13,7 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: 1
         run: |
-          cosign sign-blob --output-signature sihol.ps1.sig sihol.ps1
+          cosign sign-blob --yes --output-signature sihol.ps1.sig sihol.ps1
       - name: Verify signature
         run: |
           cosign verify-blob --signature sihol.ps1.sig sihol.ps1
